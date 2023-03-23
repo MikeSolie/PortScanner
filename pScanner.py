@@ -1,6 +1,6 @@
 #################################################
 # Mike Solie                                    #
-# Version 1.1 (first working version)           #
+# Version 1.1 (Terminal Output Cleanup)         #
 # Network Mapper/Port Scanner                   #
 #                                               #
 # Description:                                  #
@@ -64,13 +64,10 @@ def create_connection(lower, upper):
         # variable that pulls the ip address from the answered list
         ips = ip['ip']
         
-        #print(ips)  # debug line
         # tells the user that the host is up
-        #print(f'{ips} is up')  Verbose Output?
         # for loop to iterate through hosts and scan for open ports
         open_ports.append(ips)
         for port in ports:
-            #print(f'Scannning port {port}...')  # debug line
             # TCP connection variable
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             # timeout length to reduce hanging time
@@ -78,21 +75,17 @@ def create_connection(lower, upper):
             # try block - tries to connect and/or identifies reasons a connection couldn't be made
             try:
                 sock.connect((ips, port))
-                #print(f'Port {port} open')  Verbose Output?
                 # add open ports to the open_ports list
                 open_ports.append(port)
             except socket.timeout:
-                pass #print(f'Port {port} timeout')  Verbose Output?
-            except:  # need to change this except and move the if statement up and == 0
+                pass 
+            except:  
                 result = sock.connect_ex((host, port))
                 if result != 0:
-                    pass  # Verbose Output?
+                    pass
             # Close TCP connection
             sock.close()
     return open_ports
-    
-        #print(f'Finished scanning {ips}')  # debug line
-    #print(f'Finished scanning')  #  debug line
 
 #####
 # function: main
@@ -105,8 +98,6 @@ def main():
     scan = subnet_scan(host)
     # connect variable holds the create_connection variable with the port range
     connect = create_connection(1, 1024) # Change THIS
-    #print(connect) # debug print statement
-    #print(scan) # debug print statement
     # organizes information and prints to terminal - need to figure out open ports
   
     print('------------------------------------------------\nIP Address\t   MAC Address\t     Open Ports\n------------------------------------------------')
