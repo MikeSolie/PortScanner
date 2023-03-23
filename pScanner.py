@@ -1,8 +1,6 @@
 #################################################
 # Mike Solie                                    #
-# CYBR-260-40                                   #
-# 01/29/2023                                    #                                 #
-# Version 1 (first working version)             #
+# Version 1.1 (first working version)           #
 # Network Mapper/Port Scanner                   #
 #                                               #
 # Description:                                  #
@@ -24,18 +22,11 @@ import socket
 from scapy.all import *
 
 # Host variable holds the ipaddress/subnet - will be replaced in future versions
-host = 'INPUT HOST/SUBNET'
+host = 'CHANGE THIS'
 # open ports empty list - Not sure this will be staying either
 open_ports = []
 # Hosts that are up or "answered" the APR request
-answered = []
-
-#     Add in Argparse for CL arguments                  #
-#     remove debug print statements                     #
-#     getting this to iterate through felt amaxzing     #
-#     time to start documnenting and commenting code    #
-#     need to fix the error so it runs on linux         #
-#     +++PRIORITY+++ Write the file_write function      # 
+answered = [] 
 
 #####
 # function: Subnet Scan
@@ -72,9 +63,10 @@ def create_connection(lower, upper):
     for ip in answered:
         # variable that pulls the ip address from the answered list
         ips = ip['ip']
-        print(ips)  # debug line
+        
+        #print(ips)  # debug line
         # tells the user that the host is up
-        print(f'{ips} is up')
+        #print(f'{ips} is up')  Verbose Output?
         # for loop to iterate through hosts and scan for open ports
         open_ports.append(ips)
         for port in ports:
@@ -86,30 +78,21 @@ def create_connection(lower, upper):
             # try block - tries to connect and/or identifies reasons a connection couldn't be made
             try:
                 sock.connect((ips, port))
-                print(f'Port {port} open')
+                #print(f'Port {port} open')  Verbose Output?
                 # add open ports to the open_ports list
                 open_ports.append(port)
             except socket.timeout:
-                print(f'Port {port} timeout')
+                pass #print(f'Port {port} timeout')  Verbose Output?
             except:  # need to change this except and move the if statement up and == 0
                 result = sock.connect_ex((host, port))
                 if result != 0:
-                    print(f'Port {port} is closed')
+                    pass  # Verbose Output?
             # Close TCP connection
             sock.close()
     return open_ports
+    
         #print(f'Finished scanning {ips}')  # debug line
     #print(f'Finished scanning')  #  debug line
-
-
-#####
-# function: write file
-# purpose: To write which hosts are up and their open ports into a document
-# inputs: answered and open ports
-# returns: nothing, it writes a file 
-#####
-def write_file():
-    pass
 
 #####
 # function: main
@@ -118,16 +101,20 @@ def write_file():
 # returns: nothing
 #####
 def main():
-    # unused variable 
+    # scan variable holds the subnet_scan function 
     scan = subnet_scan(host)
-    print(scan)
-    # puts the create_connection function inside the connect variable and defines the port range
-    connect = create_connection(PORT, PORT) # INPUT PORT RANGE
-    # prints to terminal
-    print(connect)
-    
+    # connect variable holds the create_connection variable with the port range
+    connect = create_connection(1, 1024) # Change THIS
+    #print(connect) # debug print statement
+    #print(scan) # debug print statement
+    # organizes information and prints to terminal - need to figure out open ports
+  
+    print('------------------------------------------------\nIP Address\t   MAC Address\t     Open Ports\n------------------------------------------------')
+    for answers in answered:
+        print('{}\t{}'.format(answers['ip'], answers['mac']))
+   
 # call to start program
 ##----->
 main()
 ##<-----
-# program end
+
