@@ -1,6 +1,6 @@
 #################################################
 # Mike Solie                                    #
-# Version 1.1 (Terminal Output Cleanup)         #
+# Version 1.2 (Works and prints as expected)    #
 # Network Mapper/Port Scanner                   #
 #                                               #
 # Description:                                  #
@@ -22,11 +22,11 @@ import socket
 from scapy.all import *
 
 # Host variable holds the ipaddress/subnet - will be replaced in future versions
-host = 'CHANGE THIS'
+host = '192.168.50.0/24'
 # open ports empty list - Not sure this will be staying either
 open_ports = []
 # Hosts that are up or "answered" the APR request
-answered = [] 
+answered = []
 
 #####
 # function: Subnet Scan
@@ -63,11 +63,12 @@ def create_connection(lower, upper):
     for ip in answered:
         # variable that pulls the ip address from the answered list
         ips = ip['ip']
-        
+
         # tells the user that the host is up
+        print(f'{ips} is up')
         # for loop to iterate through hosts and scan for open ports
-        open_ports.append(ips)
         for port in ports:
+            print(f'Scannning port {port}...')
             # TCP connection variable
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             # timeout length to reduce hanging time
@@ -75,16 +76,20 @@ def create_connection(lower, upper):
             # try block - tries to connect and/or identifies reasons a connection couldn't be made
             try:
                 sock.connect((ips, port))
+                print(f'Port {port} open')
                 # add open ports to the open_ports list
-                open_ports.append(port)
+                is_open = {'ip_a' : ips, 'ports' : port}
+                open_ports.append(is_open)
+    
             except socket.timeout:
-                pass 
-            except:  
-                result = sock.connect_ex((host, port))
-                if result != 0:
-                    pass
+                print(f'Port {port} timeout')
+            except ConnectionRefusedError:  
+                pass  
             # Close TCP connection
             sock.close()
+
+        print(f'Finished scanning {ips}')
+    print(f'Finished scanning')
     return open_ports
 
 #####
@@ -94,18 +99,26 @@ def create_connection(lower, upper):
 # returns: nothing
 #####
 def main():
-    # scan variable holds the subnet_scan function 
+    # scan variable holds the subnet_scan function
     scan = subnet_scan(host)
     # connect variable holds the create_connection variable with the port range
-    connect = create_connection(1, 1024) # Change THIS
-    # organizes information and prints to terminal - need to figure out open ports
-  
+    connect = create_connection(1, 1024)
+
+    # organizes information and prints to terminal
     print('------------------------------------------------\nIP Address\t   MAC Address\t     Open Ports\n------------------------------------------------')
     for answers in answered:
-        print('{}\t{}'.format(answers['ip'], answers['mac']))
-   
+        ip_address = answers['ip']
+        mac_address = answers['mac']
+        print(f'{ip_address}\t{mac_address}')
+        for port in open_ports:
+            open_port_s = port['ports']
+            if answers['ip'] == port['ip_a']:
+                print(f'{ip_address}\t{mac_address}\t{open_port_s}')
+
+
+
 # call to start program
 ##----->
 main()
 ##<-----
-
+# program end
