@@ -82,7 +82,7 @@ def create_connection(lower, upper):
                 is_open = {'ip_a' : ips, 'ports' : port}
                 open_ports.append(is_open)
             except socket.timeout:
-                pass ?
+                pass 
             except ConnectionRefusedError: 
                 pass 
             except socket.gaierror:
