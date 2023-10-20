@@ -1,6 +1,6 @@
 # Subnet/Port Scanner
 
-This is a Python script designed to check which hosts are up on a specified subnet along with which ports are open on the available hosts. It works by sending out ARP requests to the specified subnet and creating TCP connections to hosts that respond to those requests. Results are then printed to the terminal.
+This Network Mapper/Port Scanner is a Python script that performs a subnet scan using ARP requests to identify hosts that are up. For each live host, it conducts a port scan to determine which ports are open.
 
 ## Getting Started
 
@@ -17,27 +17,29 @@ This project requires the following software to be installed on your machine:
 1. Clone the repository
 
 2. Install Scapy
-`pip install scapy`
+`pip install scapy` or `apt install scapy`
 
 More information here:
 `https://scapy.readthedocs.io/en/latest/installation.html`
 
 3. To run the program open the terminal and navigate to the project directory
 
-4. Run by using this command:
-`python3 pScanner.py` or `sudo python3 pScanner.py`
+### Features
+
+Subnet scan using ARP requests
+Port scanning on live hosts
+Command-line arguments using argparse
+Optional file output
+Verbosity control
 
 ## Usage
 
-The script has two main functions: 
+`python3 pScanner.py -H [host] -p [first_port] [last_port] -wf /path/to/scan.txt -v`
 
-`subnet_scan(ip_range)`: This function takes an IP address or subnet as input and returns a list of hosts that are up with the respective MAC addresses.
-
-`create_connection`: This function takes a range of ports to scan and checks which ports are open on the hosts found by the `subnet_scan` function. 
-
-## Example
-
-`python3 pScanner.py`
+-H, --host: Specify the IP range or single host to scan (e.g., 192.168.1.1/24 or 192.168.1.100)
+-p, --port: Define the port range to scan (e.g., 1 1024)
+-wf, --write-file: Provide a file name for text output
+-v, --verbose: Increase output verbosity
 
 ```
 ------------------------------------------------
