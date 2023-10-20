@@ -26,11 +26,15 @@ More information here:
 
 ### Features
 
-Subnet scan using ARP requests
-Port scanning on live hosts
-Command-line arguments using argparse
-Optional file output
-Verbosity control
+- Subnet scan using ARP requests
+
+- Port scanning on live hosts
+
+- Command-line arguments using argparse
+
+- Optional file output
+
+- Verbosity control
 
 ## Usage
 
